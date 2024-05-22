@@ -8,41 +8,50 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class PiCalculator {
-    public static class CalculationPi implements Runnable{
-        /*
-        initial values:        pi=3,n=2,sign=1
-        Pi = Pi + sign*(4/(n) * (n+1) * (n+2))
-         */
-//        MathContext mc;
-
+    public static BigDecimal sum;
+    static MathContext mc = new MathContext(1500);
+    public static class CalculationPiInv implements Runnable{
         int n;
-        MathContext mc = new MathContext(1000);
 
-        public CalculationPi(int n) {
-//            this.mc = mc;
-            this.n=2*n-2;
+
+        public CalculationPiInv(int n) {
+            this.n=n;
         }
 
         @Override
         public void run() {
-            System.out.println(Thread.currentThread().getName());
-            System.out.println("sum was"+ sum);
 
-            BigDecimal sign =new BigDecimal(1);
-            if ((n+2)/2%2==1){
-                sign=new BigDecimal(-1);
-            }
-            //new BigDecimal(4/((n) * (n+1) * (n+2)))
-            BigDecimal result=sign.multiply(new BigDecimal(4),mc).divide(new BigDecimal(n).multiply(new BigDecimal(n+1),mc).multiply(new BigDecimal(n+2),mc),mc);
-            System.out.println(Thread.currentThread().getName()+": "+"sum was:"+sum+"\nn: "+(n+2)/2+"sign: "+sign+"\nadd:"+result);
+            BigDecimal b2=new BigDecimal("545140134",mc).multiply(new BigDecimal(n),mc).add(new BigDecimal("13591409",mc),mc);
+            BigDecimal b3=factorial(6*n);
+            BigDecimal b4=factorial(3*n);
+            BigDecimal b5=factorial(n);
+            BigDecimal b6=new BigDecimal("-262537412640768000",mc).pow(n,mc);
+
+            BigDecimal result=b2.multiply(b3,mc).divide(b4.multiply(b5.pow(3,mc),mc).multiply(b6,mc),mc);
+
+//            System.out.println(Thread.currentThread().getName()+": "+"sum was:"+sum+"\nadd:"+result);
 
             addToSum(result);
 
         }
+        public BigDecimal factorial(int n){
+            BigDecimal temp = new BigDecimal(1);
+            for (int i = 1; i <= n; i++) {
+                temp = temp.multiply(new BigDecimal(i), mc);
+            }
+
+            return temp;
+        }
 
     }
-    //initial value of Pi is 3
-    public static BigDecimal sum;
+
+    public static synchronized BigDecimal addToSum(BigDecimal value)
+    {
+        // TODO
+        sum=sum.add(value);
+        return sum;
+    }
+
 
     /**
      * Calculate pi and represent it as a BigDecimal object with the given floating point number (digits after . )
@@ -53,29 +62,19 @@ public class PiCalculator {
      * Create as many classes and threads as you need.
      * Your code must pass all of the test cases provided in the test folder.
 
-     * @param value the exact number of digits after the floating point
+     * @param floatingPoint the exact number of digits after the floating point
      * @return pi in string format (the string representation of the BigDecimal object)
      */
 
-
-    public static synchronized void addToSum(BigDecimal value)
+    public static String calculate(int floatingPoint)
     {
         // TODO
-        sum=sum.add(value);
-        System.out.println("sum plus "+value+":\nis: "+sum);
-
-//        return sum.toString();
-    }
-
-    public static void main(String[] args) {
-        // Use the main function to test the code yourself
         ExecutorService threadPool = Executors.newFixedThreadPool(4);
+        sum=new BigDecimal(0);
 
-        sum=new BigDecimal(3);
 
-        for (int i=2;i<1000;i++){
-            CalculationPi task=new CalculationPi(i);
-            System.out.println("i: "+i);
+        for (int i=0;i<1000;i++){
+            CalculationPiInv task=new CalculationPiInv(i);
             threadPool.execute(task);
         }
         threadPool.shutdown();
@@ -86,8 +85,20 @@ public class PiCalculator {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        sum = sum.setScale(1000, RoundingMode.HALF_DOWN);
-        System.out.println("Calculated Value:  " + sum);
+
+        BigDecimal b1=new BigDecimal("426880",mc).multiply(new BigDecimal("10005",mc).sqrt(mc));
+        BigDecimal Pi=b1.divide(sum,mc);
+        Pi = Pi.setScale(floatingPoint, RoundingMode.FLOOR);
+
+        System.out.println(Pi);
+        return Pi.toString();
+    }
+
+    public static void main(String[] args) {
+        // Use the main function to test the code yourself
+//        calculate(100);
+//        calculate(4);
+//        calculate(7);
 
     }
 }

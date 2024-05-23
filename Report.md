@@ -153,3 +153,25 @@ We create an object of "Semaphore" and set the number of "permits = 2".
 We create 4 "threads" and "start" all of them and then "join" them. Each "thread" is executed in the "operator" class. In this class, we change the name of each "thread" according to the "constructor" entry. In this class, a counting variable named "count" is defined as "static". Every time a "sem" acquires, It reads "count" and the "result" array is filled. Then "count" becomes "count ++" and then "sem" becomes "release".
 
 Finally, the "main" function displays the "result" value.
+
+Links
+---
+
+- Semaphore in Java
+  
+    <https://www.youtube.com/watch?v=g19pjkJyGEU>
+  
+    <https://www.geeksforgeeks.org/semaphore-in-java/>
+- Joining Threads in Java
+
+    <https://www.geeksforgeeks.org/joining-threads-in-java/>
+- README
+
+    <https://agea.github.io/tutorial.md/>
+
+    <https://www.markdownguide.org/hacks/#:~:text=Markdown%20doesn't%20allow%20you,or%20the%20hexadecimal%20%23RRGGBB%20code.&text=font%3E-,The%20rendered%20output%20looks%20like,This%20text%20is%20red!>
+
+    <https://www.markdownguide.org/extended-syntax/#:~:text=for%20more%20information.-,Tables,either%20end%20of%20the%20row.&text=Cell%20widths%20can%20vary%2C%20as%20shown%20below.>
+- π
+
+    <https://i4cy.com/pi/>

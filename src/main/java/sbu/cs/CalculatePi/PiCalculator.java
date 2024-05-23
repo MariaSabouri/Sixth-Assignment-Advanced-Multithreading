@@ -81,7 +81,7 @@ public class PiCalculator {
 
 
         try {
-            threadPool.awaitTermination(10000, TimeUnit.MILLISECONDS);
+            threadPool.awaitTermination(1000, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -97,7 +97,7 @@ public class PiCalculator {
     public static void main(String[] args) {
         // Use the main function to test the code yourself
 //        calculate(100);
-//        calculate(4);
+        calculate(4);
 //        calculate(7);
 
     }

@@ -1,5 +1,7 @@
 package sbu.cs.Semaphore;
 
+import java.util.concurrent.Semaphore;
+
 public class Controller {
 
     /**
@@ -17,13 +19,17 @@ public class Controller {
 
      * Note that every time a thread accesses the resource, you must print its Name and the System Time.
      */
+    static String result[][]=new String[5][2];
 
-    public static void main(String[] args) {
-        Operator operator1 = new Operator("operator1");
-        Operator operator2 = new Operator("operator2");
-        Operator operator3 = new Operator("operator3");
-        Operator operator4 = new Operator("operator4");
-        Operator operator5 = new Operator("operator5");
+    public static void main(String[] args) throws InterruptedException {
+        Semaphore sem=new Semaphore(2);
+
+
+        Operator operator1 = new Operator("operator1",sem);
+        Operator operator2 = new Operator("operator2",sem);
+        Operator operator3 = new Operator("operator3",sem);
+        Operator operator4 = new Operator("operator4",sem);
+        Operator operator5 = new Operator("operator5",sem);
 
         operator1.start();
         operator2.start();
@@ -31,12 +37,25 @@ public class Controller {
         operator4.start();
         operator5.start();
 
+        operator1.join();
+        operator2.join();
+        operator3.join();
+        operator4.join();
+        operator5.join();
         /*
         TODO
             Use a Semaphore to solve the synchronization problem.
             Every time a thread accesses the resource, print its Name and the current System Time.
             Combine the 4 resulting blocks to create the final matrix product and return it.
          */
-
+        System.out.println("\n\n\n The RESULT: ");
+        for (int i=0;i<result.length;i++){
+            System.out.println("##################################");
+            for (int j=0;j<2;j++){
+                System.out.print(result[i][j]+"     ");
+            }
+            System.out.println();
+        }
+        System.out.println("##################################");
     }
 }
